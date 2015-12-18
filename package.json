@@ -1,0 +1,26 @@
+{
+  "name": "url-complete",
+  "version": "1.0.0",
+  "description": "补全url",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Real0n/url-complete.git"
+  },
+  "keywords": [
+    "url",
+    "complete"
+  ],
+  "author": "maquan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Real0n/url-complete/issues"
+  },
+  "homepage": "https://github.com/Real0n/url-complete#readme",
+  "dependencies": {
+    "through2": "^2.0.0"
+  }
+}
