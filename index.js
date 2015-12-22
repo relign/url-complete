@@ -40,36 +40,54 @@ module.exports = function (repoinfo) {
 				suffix = pAr.pop();
 			return pAr.join('.') + '.min.' + suffix;
 		}
-		chunk = chunk.replace(/<script[^>]+?src="([^"]+)"[^>]*><\/script>/igm, function ($, $1) {
-			if ($1.indexOf('http://') > -1) {
-				var finalPath = $1;
-				return '<script src=\"' + finalPath + '\"></script>';
-			} else {
-				var finalPath = handlePath($1);
-				return '<script src=\"' + finalPath + '\"></script>';
+		// var commentMarker = 'unUseComboMaker';
+		// var regStart = new RegExp('<!--\\s*' + commentMarker + '\\s*-->');
+		// var regEnd = new RegExp('(?:<!--\\s*)*\\/' + commentMarker + '\\s*-->');
+		var lines = chunk.replace(/\r\n/g, '\n').split(/\n/);
+		var inside = false;
+		var newChunk = [];
+		lines.forEach(function (line) {
+			// var build = regStart.test(line);
+			// var endbuild = regEnd.test(line);
+			// if (build) {
+			// 	inside = true;
+			// }
+			// if (endbuild) {
+			// 	inside = false;
+			// }
+
+			if (!(line.match('data-ignore="true"') || line.match('data-ignore=\'true\''))) {
+				line = line.replace(/<script[^>]+?src="([^"]+)"[^>]*><\/script>/igm, function ($, $1) {
+					if ($1.indexOf('http://') > -1) {
+						var finalPath = $1;
+					} else {
+						var finalPath = handlePath($1);
+					}
+					return '<script src=\"' + finalPath + '\"></script>';
+				});
+
+				line = line.replace(/<link[^>]+?href="([^"]+?)"[^>]+?rel="stylesheet"[^>]*>/igm, function ($, $1) {
+					if ($1.indexOf('http://') > -1) {
+						var finalPath = $1;
+					} else {
+						var finalPath = handlePath($1);
+					}
+					return '<link href=\"' + finalPath + '\" rel="stylesheet">';
+				});
+
+				line = line.replace(/<link[^>]+?rel="stylesheet"[^>]+?href="([^"]+?)"[^>]*>/igm, function ($, $1) {
+					if ($1.indexOf('http://') > -1) {
+						var finalPath = $1;
+					} else {
+						var finalPath = handlePath($1);
+					}
+					return '<link rel="stylesheet" href=\"' + finalPath + '\">';
+				});
 			}
+			newChunk.push(line)
 		});
 
-		chunk = chunk.replace(/<link[^>]+?href="([^"]+?)"[^>]+?rel="stylesheet"[^>]*>/igm, function ($, $1) {
-			if ($1.indexOf('http://') > -1) {
-				var finalPath = $1;
-				return '<link href=\"' + finalPath + '\" rel="stylesheet">';
-			} else {
-				var finalPath = handlePath($1);
-				return '<link href=\"' + finalPath + '\" rel="stylesheet">';
-			}
-		});
-
-		chunk = chunk.replace(/<link[^>]+?rel="stylesheet"[^>]+?href="([^"]+?)"[^>]*>/igm, function ($, $1) {
-			if ($1.indexOf('http://') > -1) {
-				var finalPath = $1;
-				return '<link rel="stylesheet" href=\"' + finalPath + '\">';
-			} else {
-				var finalPath = handlePath($1);
-				return '<link rel="stylesheet" href=\"' + finalPath + '\">';
-			}
-		});
-
+		var chunk = newChunk.join('\n');
 		file.contents = new Buffer(chunk);
 
 		cb(null, file);
