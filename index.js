@@ -38,7 +38,8 @@ module.exports = function (repoinfo) {
 		function addSuffix(p) {
 			var pAr = p.split('.'),
 				suffix = pAr.pop();
-			return pAr.join('.') + '.min.' + suffix;
+			// return pAr.join('.') + '.min.' + suffix;
+			return pAr.join('.') + suffix;
 		}
 		// var commentMarker = 'unUseComboMaker';
 		// var regStart = new RegExp('<!--\\s*' + commentMarker + '\\s*-->');
