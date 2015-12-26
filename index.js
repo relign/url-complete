@@ -39,7 +39,7 @@ module.exports = function (repoinfo) {
 			var pAr = p.split('.'),
 				suffix = pAr.pop();
 			// return pAr.join('.') + '.min.' + suffix;
-			return pAr.join('.') + suffix;
+			return pAr.join('.') + '.' + suffix;
 		}
 		// var commentMarker = 'unUseComboMaker';
 		// var regStart = new RegExp('<!--\\s*' + commentMarker + '\\s*-->');
