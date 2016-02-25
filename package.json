@@ -1,6 +1,6 @@
 {
   "name": "url-complete",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "补全url",
   "main": "index.js",
   "scripts": {
