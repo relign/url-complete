@@ -1,5 +1,5 @@
 /**
- * @pre-combo
+ * @url-complete
  * @author maquan
  * @description 根据配置文件拼接成完整的URL
  */
@@ -48,7 +48,7 @@ module.exports = function (repoinfo) {
                     } else {
                         finalPath = handlePath($1);
                     }
-                    return '<script src=\"' + finalPath + '\"></script>';
+                    return String($).replace(String($1), finalPath);
                 });
 
                 line = line.replace(/<link[^>]+?href="([^"]+?)"[^>]+?rel="stylesheet"[^>]*>/igm, function ($, $1) {

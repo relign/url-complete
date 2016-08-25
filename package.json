@@ -1,7 +1,7 @@
 {
   "name": "url-complete",
-  "version": "1.0.5",
-  "description": "补全url",
+  "version": "1.0.6",
+  "description": "complete url",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
