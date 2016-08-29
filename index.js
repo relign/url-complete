@@ -77,7 +77,7 @@ module.exports = function (repoinfo) {
                 });
 
                 var regStyle2 = new RegExp(/<link[^>]+?rel="stylesheet"[^>]+?href="([^"]+?)"[^>]*>/igm);
-                line = line.replace(, function ($, $1) {
+                line = line.replace(regStyle2, function ($, $1) {
                     var finalPath;
                     if ($1.indexOf('http://') === 0 ||
                         $1.indexOf('https://') === 0 ||
