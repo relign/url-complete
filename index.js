@@ -21,7 +21,8 @@ module.exports = function (repoinfo) {
         /**
          * 处理后缀和相对路经
          * @param  {string} p 文件名==>like index.js
-         * @return {string}   路径名==>line HFE/generator-test/0.1.0/pages/abc/index.js
+         * @return {string}   路径名==>like
+         *                    HFE/generator-test/0.1.0/pages/abc/index.js
          */
         function handlePath(p) {
             if (p.indexOf('/') === 0) {
@@ -33,27 +34,41 @@ module.exports = function (repoinfo) {
                 relative = p.replace(file.base, ''),
                 version = repoinfo.version,
                 group = repoinfo.group;
-            return repoinfo.url + '/' + group + '/' + projectname + '/' + version + '/' + relative;
+            return repoinfo.url +
+                '/' +
+                group +
+                '/' +
+                projectname +
+                '/' +
+                version +
+                '/' +
+                relative;
         }
 
         var lines = chunk.replace(/\r\n/g, '\n').split(/\n/);
         var newChunk = [];
 
         lines.forEach(function (line) {
-            if (!(line.match('data-ignore="true"') || line.match('data-ignore=\'true\''))) {
-                line = line.replace(/<script[^>]+?src="([^"]+)"[^>]*><\/script>/igm, function ($, $1) {
+            if (!(line.match('data-ignore="true"') ||
+                    line.match('data-ignore=\'true\''))) {
+                var regScript = new RegExp(/<script[^>]+?src="([^"]+)"[^>]*><\/script>/igm);
+                line = line.replace(regScript, function ($, $1) {
                     var finalPath;
-                    if ($1.indexOf('http://') > -1) {
+                    if ($1.indexOf('http://') === 0 ||
+                        $1.indexOf('https://') === 0 ||
+                        $1.indexOf('//') === 0) {
                         finalPath = $1;
                     } else {
                         finalPath = handlePath($1);
                     }
                     return String($).replace(String($1), finalPath);
                 });
-
-                line = line.replace(/<link[^>]+?href="([^"]+?)"[^>]+?rel="stylesheet"[^>]*>/igm, function ($, $1) {
+                var regStyle1 = new RegExp(/<link[^>]+?href="([^"]+?)"[^>]+?rel="stylesheet"[^>]*>/igm);
+                line = line.replace(regStyle1, function ($, $1) {
                     var finalPath;
-                    if ($1.indexOf('http://') > -1) {
+                    if ($1.indexOf('http://') === 0 ||
+                        $1.indexOf('https://') === 0 ||
+                        $1.indexOf('//') === 0) {
                         finalPath = $1;
                     } else {
                         finalPath = handlePath($1);
@@ -61,9 +76,12 @@ module.exports = function (repoinfo) {
                     return '<link href=\"' + finalPath + '\" rel="stylesheet">';
                 });
 
-                line = line.replace(/<link[^>]+?rel="stylesheet"[^>]+?href="([^"]+?)"[^>]*>/igm, function ($, $1) {
+                var regStyle2 = new RegExp(/<link[^>]+?rel="stylesheet"[^>]+?href="([^"]+?)"[^>]*>/igm);
+                line = line.replace(, function ($, $1) {
                     var finalPath;
-                    if ($1.indexOf('http://') > -1) {
+                    if ($1.indexOf('http://') === 0 ||
+                        $1.indexOf('https://') === 0 ||
+                        $1.indexOf('//') === 0) {
                         finalPath = $1;
                     } else {
                         finalPath = handlePath($1);
